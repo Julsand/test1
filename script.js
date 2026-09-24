@@ -319,6 +319,113 @@ travelForm.addEventListener('submit', function (event) {
     });
 });
 
+// Today in Oslo: next events from the Visit Oslo calendar feed (iCal)
+var EVENTS_FEED = 'https://maurolibanio.github.io/oslo-events-calendar/oslo-all.ics';
+var eventsBox = document.getElementById('events');
+var eventsLoaded = false;
+
+// Current Oslo time as "YYYYMMDDTHHMMSS", the same format the feed uses
+function osloStamp(date) {
+  var parts = {};
+  new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/Oslo', hourCycle: 'h23',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
+  }).formatToParts(date).forEach(function (p) { parts[p.type] = p.value; });
+  return parts.year + parts.month + parts.day + 'T' + parts.hour + parts.minute + parts.second;
+}
+
+function parseIcs(text) {
+  // Join folded lines, then read each VEVENT's fields
+  var lines = text.replace(/\r?\n[ \t]/g, '').split(/\r?\n/);
+  var events = [];
+  var current = null;
+  lines.forEach(function (line) {
+    if (line === 'BEGIN:VEVENT') { current = {}; return; }
+    if (line === 'END:VEVENT') { if (current) events.push(current); current = null; return; }
+    if (!current) return;
+    var colon = line.indexOf(':');
+    if (colon < 1) return;
+    var key = line.slice(0, colon).split(';')[0];
+    current[key] = line.slice(colon + 1)
+      .replace(/\\n/gi, '\n').replace(/\\([,;\\])/g, '$1');
+  });
+  return events;
+}
+
+function cleanVenue(location) {
+  // The feed repeats names like "National Theatre - National Theatre"
+  var parts = (location || '').split(' - ');
+  return parts.length === 2 && parts[0] === parts[1] ? parts[0] : (location || '');
+}
+
+function eventCategory(description) {
+  var match = /Category:\s*([^|\n]+)/.exec(description || '');
+  return match ? match[1].trim() : '';
+}
+
+function renderEvents(events) {
+  var now = osloStamp(new Date());
+  var today = now.slice(0, 8);
+  var seen = {};
+  var upcoming = events
+    .filter(function (e) {
+      var start = e.DTSTART || '';
+      return start.slice(0, 8) === today && start >= now;
+    })
+    .sort(function (a, b) { return a.DTSTART < b.DTSTART ? -1 : a.DTSTART > b.DTSTART ? 1 : 0; })
+    .filter(function (e) {
+      var key = e.SUMMARY + e.DTSTART;
+      if (seen[key]) return false;
+      seen[key] = true;
+      return true;
+    })
+    .slice(0, 5);
+
+  if (!upcoming.length) {
+    eventsBox.innerHTML = '<p class="result-note">No more events listed for today. ' +
+      '<a href="https://www.visitoslo.com/en/whats-on/" target="_blank" rel="noopener">See what’s on this week</a>.</p>';
+    return;
+  }
+
+  eventsBox.innerHTML = '<ul class="event-list">' + upcoming.map(function (e) {
+    var start = e.DTSTART;
+    var time = start.slice(9, 11) + ':' + start.slice(11, 13);
+    var category = eventCategory(e.DESCRIPTION);
+    var link = /^https:\/\//.test(e.URL || '') ? e.URL : 'https://www.visitoslo.com/en/whats-on/';
+    return '<li class="event">' +
+      '<time>' + time + '</time>' +
+      '<h3><a href="' + escapeHtml(link) + '" target="_blank" rel="noopener">' + escapeHtml(e.SUMMARY || 'Event') + '</a></h3>' +
+      '<p class="venue">' + escapeHtml(cleanVenue(e.LOCATION)) + '</p>' +
+      (category ? '<span class="tag">' + escapeHtml(category) + '</span>' : '') +
+      '</li>';
+  }).join('') + '</ul>';
+}
+
+function loadEvents() {
+  if (eventsLoaded) return;
+  eventsLoaded = true;
+  eventsBox.innerHTML = '<p class="result-note">Loading today’s events…</p>';
+  fetch(EVENTS_FEED)
+    .then(function (res) {
+      if (!res.ok) throw new Error('Feed error');
+      return res.text();
+    })
+    .then(function (text) { renderEvents(parseIcs(text)); })
+    .catch(function () {
+      eventsLoaded = false;
+      eventsBox.innerHTML = '<p class="result-error">Could not load today’s events. Close and open this section to try again, or ' +
+        '<a href="https://www.visitoslo.com/en/whats-on/" target="_blank" rel="noopener">see them on Visit Oslo</a>.</p>';
+    });
+}
+
+// Only download the feed when someone opens the section
+var todayDetails = document.querySelector('#today details');
+todayDetails.addEventListener('toggle', function () {
+  if (todayDetails.open) loadEvents();
+});
+if (todayDetails.open) loadEvents();
+
 // Suggest an idea: sent by email through Web3Forms (https://web3forms.com)
 // Replace with the access key Web3Forms emails you. The key decides which inbox gets the ideas.
 var WEB3FORMS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
