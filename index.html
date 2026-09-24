@@ -20,6 +20,7 @@
         <li><a href="#build">Build</a></li>
         <li><a href="#share">Share</a></li>
         <li><a href="#plan">Session plan</a></li>
+        <li><a href="#getting-there">Getting there</a></li>
       </ul>
     </nav>
   </header>
@@ -71,6 +72,39 @@
         <li><time>19:00</time> <strong>Build</strong> <span>Heads down. Ask for help any time.</span></li>
         <li><time>20:30</time> <strong>Share demos</strong> <span>Three minutes per team. Applause guaranteed.</span></li>
       </ol>
+    </section>
+
+    <section class="travel container" id="getting-there">
+      <h2>Getting there</h2>
+      <p>We meet at <strong>Rådhusplassen</strong> in central Oslo. Type where you are coming from and pick how you want to travel.</p>
+
+      <form class="travel-form" id="travel-form" novalidate>
+        <div class="field">
+          <label for="origin">Your starting point</label>
+          <input id="origin" name="origin" type="text" list="origin-suggestions"
+                 value="Carl Berners plass" autocomplete="off" required
+                 placeholder="Address, stop or place in Oslo">
+          <datalist id="origin-suggestions"></datalist>
+        </div>
+
+        <div class="field">
+          <span class="field-label">Destination</span>
+          <p class="destination">Rådhusplassen, Oslo</p>
+        </div>
+
+        <fieldset class="mode-switch">
+          <legend>How do you want to travel?</legend>
+          <label><input type="radio" name="mode" value="transit" checked> <span>Public transport</span></label>
+          <label><input type="radio" name="mode" value="bike"> <span>City bike</span></label>
+        </fieldset>
+
+        <button class="button" type="submit">Find the way</button>
+      </form>
+
+      <div class="travel-results" id="travel-results" aria-live="polite"></div>
+
+      <p class="credits small">Travel data from <a href="https://developer.entur.org/" target="_blank" rel="noopener">Entur</a>
+        and <a href="https://oslobysykkel.no/en/open-data" target="_blank" rel="noopener">Oslo Bysykkel</a>.</p>
     </section>
   </main>
 
