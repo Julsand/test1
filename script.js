@@ -93,6 +93,7 @@ function geocode(text, size) {
     '&focus.point.lat=' + DESTINATION.lat + '&focus.point.lon=' + DESTINATION.lon +
     '&text=' + encodeURIComponent(text);
   return fetch(url, { headers: { 'ET-Client-Name': CLIENT_NAME } })
+    .catch(unreachable('Entur place search'))
     .then(function (res) {
       if (!res.ok) throw new Error('Place search failed');
       return res.json();
@@ -129,6 +130,14 @@ function findOrigin(text) {
   });
 }
 
+// Turn a blocked or failed request into a message that names the service
+function unreachable(service) {
+  return function () {
+    throw new Error('Could not reach ' + service + '. Check your connection, or open the page ' +
+      'directly (for example on GitHub Pages) if it is shown inside a preview that blocks outside requests.');
+  };
+}
+
 function showMessage(text, isError) {
   results.innerHTML = '<p class="' + (isError ? 'result-error' : 'result-note') + '">' + escapeHtml(text) + '</p>';
 }
@@ -159,6 +168,7 @@ function findTrips(origin) {
     headers: { 'Content-Type': 'application/json', 'ET-Client-Name': CLIENT_NAME },
     body: JSON.stringify(body)
   })
+    .catch(unreachable('Entur journey planner'))
     .then(function (res) {
       if (!res.ok) throw new Error('Journey search failed');
       return res.json();
@@ -210,6 +220,7 @@ function getGbfs(file) {
       // Retry without the custom header in case the browser blocks it (CORS)
       return fetch(GBFS_URL + file);
     })
+    .catch(unreachable('Oslo Bysykkel'))
     .then(function (res) {
       if (!res.ok) throw new Error('City bike data is not available right now');
       return res.json();
@@ -287,10 +298,7 @@ travelForm.addEventListener('submit', function (event) {
       return mode === 'bike' ? findBikes(origin) : findTrips(origin);
     })
     .catch(function (error) {
-      var message = error instanceof TypeError
-        ? 'Could not reach the travel service. Check your connection and try again.'
-        : error.message;
-      showMessage(message, true);
+      showMessage(error.message, true);
     })
     .then(function () {
       button.disabled = false;
