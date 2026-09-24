@@ -368,6 +368,45 @@ h1 span { color: var(--accent); }
 .travel-results h3.group { margin: 0 0 12px; font-size: 1.2rem; }
 .credits { color: var(--muted); margin-top: 16px; }
 
+/* Suggest an idea */
+.ideas {
+  padding-bottom: 72px;
+  scroll-margin-top: 72px;
+}
+.ideas h2 {
+  margin: 0 0 4px;
+  font-size: clamp(1.6rem, 5vw, 2.2rem);
+  letter-spacing: -0.02em;
+}
+.ideas > p { margin: 0 0 20px; color: var(--muted); }
+
+.idea-form {
+  display: grid;
+  gap: 20px;
+  background: var(--dark-2);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+}
+.idea-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--light);
+  color: var(--dark);
+  font: inherit;
+  resize: vertical;
+}
+.idea-form textarea:focus { border-color: var(--accent); outline: none; }
+.idea-form .button { justify-self: start; }
+.idea-form .button:disabled { opacity: 0.6; cursor: wait; transform: none; }
+.optional { font-weight: 400; color: var(--muted); }
+.trap { position: absolute; left: -9999px; }
+
+.idea-status { margin: 16px 0 0; font-weight: 700; }
+.idea-status.success { color: #7bdcb5; }
+.idea-status.error { color: var(--accent); }
+
 /* Footer */
 .site-footer {
   border-top: 1px solid rgba(251, 247, 240, 0.08);
@@ -378,18 +417,20 @@ h1 span { color: var(--accent); }
 .small { font-size: 0.875rem; }
 
 /* Larger screens */
-@media (min-width: 720px) {
+@media (min-width: 900px) {
   .nav-toggle { display: none; }
   .nav-links {
     display: flex;
-    gap: 28px;
+    gap: 24px;
     position: static;
     padding: 0;
     border: 0;
     background: none;
   }
   .nav-links a { padding: 8px 0; }
+}
 
+@media (min-width: 720px) {
   .steps { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 
   .travel-form {
@@ -397,6 +438,12 @@ h1 span { color: var(--accent); }
     padding: 28px;
   }
   .mode-switch { grid-column: 1 / -1; }
+
+  .idea-form {
+    grid-template-columns: 1fr 1fr;
+    padding: 28px;
+  }
+  .field-wide { grid-column: 1 / -1; }
 }
 
 @media (min-width: 960px) {

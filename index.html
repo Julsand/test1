@@ -21,6 +21,7 @@
         <li><a href="#share">Share</a></li>
         <li><a href="#plan">Session plan</a></li>
         <li><a href="#getting-there">Getting there</a></li>
+        <li><a href="#ideas">Ideas</a></li>
       </ul>
     </nav>
   </header>
@@ -105,6 +106,32 @@
 
       <p class="credits small">Travel data from <a href="https://developer.entur.org/" target="_blank" rel="noopener">Entur</a>
         and <a href="https://oslobysykkel.no/en/open-data" target="_blank" rel="noopener">Oslo Bysykkel</a>.</p>
+    </section>
+
+    <section class="ideas container" id="ideas">
+      <h2>Suggest an idea</h2>
+      <p>Got a project, theme or topic for an upcoming meetup? Tell us. Every idea goes straight to the organisers.</p>
+
+      <form class="idea-form" id="idea-form" novalidate>
+        <div class="field field-wide">
+          <label for="idea">Your idea</label>
+          <textarea id="idea" name="message" rows="5" maxlength="2000" required
+                    placeholder="For example: build a bot that finds free meeting rooms in Oslo"></textarea>
+        </div>
+        <div class="field">
+          <label for="idea-name">Name <span class="optional">(optional)</span></label>
+          <input id="idea-name" name="name" type="text" maxlength="100" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="idea-email">Email <span class="optional">(optional, if you want a reply)</span></label>
+          <input id="idea-email" name="email" type="email" maxlength="200" autocomplete="email">
+        </div>
+        <!-- Spam trap: people never see or fill this -->
+        <input class="trap" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="button" type="submit">Send idea</button>
+      </form>
+
+      <p class="idea-status" id="idea-status" aria-live="polite"></p>
     </section>
   </main>
 

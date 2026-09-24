@@ -305,5 +305,68 @@ travelForm.addEventListener('submit', function (event) {
     });
 });
 
+// Suggest an idea: sent by email through Web3Forms (https://web3forms.com)
+// Replace with the access key Web3Forms emails you. The key decides which inbox gets the ideas.
+var WEB3FORMS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY';
+
+var ideaForm = document.getElementById('idea-form');
+var ideaStatus = document.getElementById('idea-status');
+
+function setIdeaStatus(text, type) {
+  ideaStatus.textContent = text;
+  ideaStatus.className = 'idea-status ' + type;
+}
+
+ideaForm.addEventListener('submit', function (event) {
+  event.preventDefault();
+  var idea = ideaForm.elements.message.value.trim();
+  var email = ideaForm.elements.email;
+
+  if (!idea) {
+    setIdeaStatus('Please write your idea first.', 'error');
+    ideaForm.elements.message.focus();
+    return;
+  }
+  if (email.value && !email.checkValidity()) {
+    setIdeaStatus('That email address does not look right.', 'error');
+    email.focus();
+    return;
+  }
+  if (WEB3FORMS_KEY.indexOf('YOUR_') === 0) {
+    setIdeaStatus('Idea submissions are not set up yet. Please try again later.', 'error');
+    return;
+  }
+
+  var button = ideaForm.querySelector('button');
+  button.disabled = true;
+  setIdeaStatus('Sending…', '');
+
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: JSON.stringify({
+      access_key: WEB3FORMS_KEY,
+      subject: 'New Oslo Hack idea',
+      from_name: 'Oslo Hack website',
+      name: ideaForm.elements.name.value.trim() || 'Anonymous',
+      email: email.value.trim(),
+      message: idea,
+      botcheck: ideaForm.elements.botcheck.checked
+    })
+  })
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      if (!data.success) throw new Error(data.message);
+      ideaForm.reset();
+      setIdeaStatus('Thanks! Your idea has been sent to the organisers.', 'success');
+    })
+    .catch(function () {
+      setIdeaStatus('Sorry, your idea could not be sent. Please try again in a moment.', 'error');
+    })
+    .then(function () {
+      button.disabled = false;
+    });
+});
+
 // Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
