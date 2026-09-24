@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Oslo Hack</title>
+  <meta name="description" content="Oslo Hack helps people in Oslo find others to build small projects with.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main">
+      <a class="logo" href="#top">Oslo<span>Hack</span></a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <span class="visually-hidden">Menu</span>
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#meet">Meet</a></li>
+        <li><a href="#build">Build</a></li>
+        <li><a href="#share">Share</a></li>
+        <li><a href="#plan">Session plan</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero container">
+      <div class="hero-text">
+        <p class="eyebrow">Oslo · small projects · good people</p>
+        <h1>Find your people.<br><span>Build something small.</span></h1>
+        <p class="intro">
+          Oslo Hack brings together designers, developers, and curious beginners
+          who want to make things with others. Come alone or bring a friend.
+          Pick an idea, form a small team, and leave with something you built together.
+        </p>
+        <a class="button" href="#plan">See the session plan</a>
+      </div>
+      <figure class="hero-photo">
+        <img src="photo.jpg" alt="Four people coding on laptops around a table under a warm lamp" width="1200" height="800">
+      </figure>
+    </section>
+
+    <section class="steps container" aria-label="How it works">
+      <article class="step" id="meet">
+        <span class="step-num">01</span>
+        <h2>Meet</h2>
+        <p>Say hello, share what you are good at, and hear what others want to make. No pitch deck needed.</p>
+      </article>
+      <article class="step" id="build">
+        <span class="step-num">02</span>
+        <h2>Build</h2>
+        <p>Join a team of two to four people and build something small you can finish in one evening.</p>
+      </article>
+      <article class="step" id="share">
+        <span class="step-num">03</span>
+        <h2>Share</h2>
+        <p>Show what you made, however rough. Get feedback, swap contacts, and maybe keep going.</p>
+      </article>
+    </section>
+
+    <section class="plan container" id="plan">
+      <h2>How a session works</h2>
+      <p>One evening, four simple parts.</p>
+      <button class="button" id="plan-toggle" type="button" aria-expanded="false" aria-controls="plan-list">
+        Show session plan
+      </button>
+      <ol class="plan-list" id="plan-list" hidden>
+        <li><time>18:00</time> <strong>Meet</strong> <span>Coffee, name tags, quick intros.</span></li>
+        <li><time>18:30</time> <strong>Pitch ideas</strong> <span>One minute each. Teams form around ideas.</span></li>
+        <li><time>19:00</time> <strong>Build</strong> <span>Heads down. Ask for help any time.</span></li>
+        <li><time>20:30</time> <strong>Share demos</strong> <span>Three minutes per team. Applause guaranteed.</span></li>
+      </ol>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="logo">Oslo<span>Hack</span></p>
+      <p>A friendly place to meet people and build small projects in Oslo.</p>
+      <p class="small">&copy; <span id="year">2026</span> Oslo Hack</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
