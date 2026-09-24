@@ -224,18 +224,57 @@ h1 span { color: var(--accent); }
 }
 .plan-list span { color: var(--muted); }
 
-/* Getting there */
-.travel {
-  padding-bottom: 72px;
-  scroll-margin-top: 72px;
+/* Collapsible sections */
+.collapsible {
+  border-top: 1px solid rgba(251, 247, 240, 0.12);
+  border-bottom: 1px solid rgba(251, 247, 240, 0.12);
 }
-.travel h2 {
+.collapsible summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  cursor: pointer;
+  list-style: none;
+}
+.collapsible summary::-webkit-details-marker { display: none; }
+.collapsible summary h2 {
   margin: 0 0 4px;
   font-size: clamp(1.6rem, 5vw, 2.2rem);
   letter-spacing: -0.02em;
 }
-.travel > p { margin: 0 0 20px; color: var(--muted); }
-.travel > p strong { color: var(--light); }
+.collapsible summary:hover h2 { color: var(--accent); }
+.summary-intro { display: block; color: var(--muted); }
+.summary-intro strong { color: var(--light); }
+
+.chevron {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  position: relative;
+  transition: transform 0.2s ease;
+}
+.chevron::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  width: 11px;
+  height: 11px;
+  border-right: 3px solid var(--accent);
+  border-bottom: 3px solid var(--accent);
+  transform: rotate(45deg);
+}
+.collapsible[open] .chevron { transform: rotate(180deg); }
+.collapsible-body { padding-bottom: 28px; }
+
+/* Getting there */
+.travel {
+  scroll-margin-top: 72px;
+}
 
 .travel-form {
   display: grid;
@@ -373,12 +412,7 @@ h1 span { color: var(--accent); }
   padding-bottom: 72px;
   scroll-margin-top: 72px;
 }
-.ideas h2 {
-  margin: 0 0 4px;
-  font-size: clamp(1.6rem, 5vw, 2.2rem);
-  letter-spacing: -0.02em;
-}
-.ideas > p { margin: 0 0 20px; color: var(--muted); }
+.ideas .collapsible { border-top: 0; }
 
 .idea-form {
   display: grid;
@@ -457,5 +491,5 @@ h1 span { color: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .button { transition: none; }
+  .button, .chevron { transition: none; }
 }

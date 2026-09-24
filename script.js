@@ -26,6 +26,20 @@ planToggle.addEventListener('click', function () {
   planToggle.textContent = show ? 'Hide session plan' : 'Show session plan';
 });
 
+// Open a collapsed section when a link (or the page address) points to it
+function openSection(hash) {
+  var target = hash.length > 1 && document.getElementById(hash.slice(1));
+  var details = target && target.querySelector('details.collapsible');
+  if (details) details.open = true;
+}
+openSection(location.hash);
+window.addEventListener('hashchange', function () { openSection(location.hash); });
+
+document.addEventListener('click', function (event) {
+  var link = event.target.closest('a[href^="#"]');
+  if (link) openSection(link.getAttribute('href'));
+});
+
 // Getting there: Entur (public transport) and Oslo Bysykkel (city bikes)
 var CLIENT_NAME = 'Oslo-vibecoding';
 var DESTINATION = { name: 'Rådhusplassen, Oslo', lat: 59.9118, lon: 10.7336 };
